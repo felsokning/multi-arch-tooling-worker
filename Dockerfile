@@ -58,6 +58,7 @@ RUN apt-get update \
     && chmod a+r /usr/share/keyrings/octopus.gpg \
     && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/usr/share/keyrings/octopus.gpg] https://apt.octopus.com/ stable main" | tee /etc/apt/sources.list.d/octopus.list \
     && apt-get update \
+    && apt-cache show gh \
     && ACCEPT_EULA=Y apt-get install -y --no-install-recommends $(cat /tmp/required.list) \
     # Update npm
     && npm config set fund false \
