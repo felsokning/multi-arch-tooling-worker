@@ -1,4 +1,4 @@
-FROM ubuntu:25.10 AS build
+FROM ubuntu:24.04 AS build
 
 COPY prerequisites.list /tmp/prerequisites.list
 COPY required.list /tmp/required.list
