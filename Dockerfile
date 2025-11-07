@@ -25,11 +25,11 @@ RUN apt-get update \
     # Install prerequisites
     && apt-get install -y --no-install-recommends $(cat /tmp/prerequisites.list) \
     # Add Aqua Security Repository
-    && wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add - \
-    && echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" > /etc/apt/sources.list.d/trivy.list \
+    && wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" > /etc/apt/sources.list.d/trivy.list \
     && curl -fsSL https://get.opentofu.org/opentofu.gpg | tee /usr/share/keyrings/opentofu.gpg \
     && curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | gpg --no-tty --batch --dearmor -o /usr/share/keyrings/opentofu-repo.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/opentofu.gpg,/usr/share/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main\ndeb-src [signed-by=/usr/share/keyrings/opentofu.gpg,/usr/share/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" | tee /etc/apt/sources.list.d/opentofu.list \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/opentofu.gpg,/usr/share/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main\ndeb-src [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/opentofu.gpg,/usr/share/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" | tee /etc/apt/sources.list.d/opentofu.list \
     # Add GitHub CLI Repository
     && wget -nv -O- https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list \
@@ -49,14 +49,14 @@ RUN apt-get update \
     && wget --https-only --secure-protocol=TLSv1_2 https://packages.microsoft.com/config/ubuntu/$(lsb_release -r -s)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && rm -f packages-microsoft-prod.deb \
-    && echo "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azure-cli.list \
-    && wget --https-only --secure-protocol=TLSv1_2 -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add - \
+    && wget --https-only --secure-protocol=TLSv1_2 -q https://packages.microsoft.com/keys/microsoft.asc -O- | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg - \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azure-cli.list \
     # Add NodeJS Repository
     && wget --quiet --secure-protocol=TLSv1_2 --https-only -O - https://deb.nodesource.com/setup_25.x | bash \
     # Add Octopus Repository
     && curl -fsSL https://apt.octopus.com/public.key | gpg --dearmor -o /usr/share/keyrings/octopus.gpg \
     && chmod a+r /usr/share/keyrings/octopus.gpg \
-    && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/usr/share/keyrings/octopus.gpg] https://apt.octopus.com/ stable main" | tee /etc/apt/sources.list.d/octopus.list \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/octopus.gpg] https://apt.octopus.com/ stable main" | tee /etc/apt/sources.list.d/octopus.list \
     && apt-get update \
     && apt-cache show gh \
     && ACCEPT_EULA=Y apt-get install -y --no-install-recommends $(cat /tmp/required.list) \
