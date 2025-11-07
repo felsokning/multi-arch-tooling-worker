@@ -58,9 +58,14 @@ RUN apt-get update \
     && chmod a+r /usr/share/keyrings/octopus.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/octopus.gpg] https://apt.octopus.com/ stable main" | tee /etc/apt/sources.list.d/octopus.list \
     && apt-get update \
-    && apt-cache show octopus-cli \
-    && apt-cache show jfrog-cli-v2 \
     && ACCEPT_EULA=Y apt-get install -y --no-install-recommends $(cat /tmp/required.list) \
+    # Install Octopus CLI (not available for arm64 in apt repo as of 2.19.1)
+    && wget --https-only --secure-protocol=TLSv1_2 https://github.com/OctopusDeploy/cli/releases/download/v2.19.1/octopus-cli_2.19.1_linux_$(dpkg --print-architecture).deb \
+    && dpkg -i octopus-cli_2.19.1_linux_$(dpkg --print-architecture).deb \
+    && rm -f octopus-cli_2.19.1_linux_$(dpkg --print-architecture).deb \
+    # Install JFrom CLI v2 (not available for arm64 in apt repo as of 2.82.0)
+    && https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/2.82.0/jfrog-cli-linux-$(dpkg --print-architecture)/jf -O /usr/local/bin/jf \
+    && chmod +x /usr/local/bin/jf \
     # Update npm
     && npm config set fund false \
     && npm install -g n \

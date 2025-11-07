@@ -1,1 +1,1 @@
-azure-cli=2.78.0-1~noble spnetcore-runtime-8.0 dotnet-runtime-8.0 dotnet-sdk-8.0 gh=2.83.0 helm=3.19.0-1 jfrog-cli-v2-jf=2.82.0 mssql-tools18=18.4.1.1-1 nodejs=25.1.0-1nodesource1 octopus-cli=2.19.1 powershell=7.5.4-1.deb terraform=1.13.4-1 tofu=1.10.6
+azure-cli=2.78.0-1~noble spnetcore-runtime-8.0 dotnet-runtime-8.0 dotnet-sdk-8.0 gh=2.83.0 helm=3.19.0-1 mssql-tools18=18.4.1.1-1 nodejs=25.1.0-1nodesource1 powershell=7.5.4-1.deb terraform=1.13.4-1 tofu=1.10.6
